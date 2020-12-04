@@ -1,0 +1,4 @@
+﻿  Source.cpp
+C:\Users\frres\source\repos\ConsoleGameEngine\Source.cpp(20,26): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\frres\source\repos\ConsoleGameEngine\Source.cpp(198,16): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  ConsoleGameEngine.vcxproj -> C:\Users\frres\source\repos\ConsoleGameEngine\Debug\ConsoleGameEngine.exe
