@@ -1,2 +1,0 @@
-C:\Users\frres\source\repos\ConsoleGameEngine\Debug\ConsoleGameEngine.exe
-C:\Users\frres\source\repos\ConsoleGameEngine\Debug\ConsoleGameEngine.pdb
