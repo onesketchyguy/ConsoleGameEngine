@@ -30,7 +30,7 @@ namespace Homeless
         public string AppTitle;
         public string AppBranding;
 
-        public System.Random random;
+        public Random random;
 
         internal int bufferWidth, bufferHeight, bufferLength;
 
@@ -39,7 +39,7 @@ namespace Homeless
         internal Pixel[] buffer;
 
         private TextWriter textWriter;
-
+        private TextReader input;
         internal bool bufferChanged = true;
 
         private readonly Queue<ConsoleKeyInfo> messageQueue = new Queue<ConsoleKeyInfo>();
@@ -67,6 +67,8 @@ namespace Homeless
             {
                 buffer[i].foreColor = (ConsoleColor)(random.Next(0, int.MaxValue) % 15);
             }
+
+            StartDrawingbuffer();
 
             time = new Stopwatch();
             time.Start();
@@ -154,12 +156,18 @@ namespace Homeless
             bufferChanged = true;
         }
 
+        private bool drawing = false;
+
         private void DrawBuffer()
         {
             if (bufferChanged == false) return;
 
+            if (drawing) return;
+
             Task drawBuffer = Task.Run(() =>
             {
+                drawing = true;
+
                 Console.Clear();
 
                 for (int i = 0; i < buffer.Length; i++)
@@ -167,16 +175,31 @@ namespace Homeless
                     Console.ForegroundColor = buffer[i].foreColor;
                     Console.BackgroundColor = buffer[i].backColor;
 
-                    textWriter.WriteAsync(buffer[i].character);
-                    //Console.Write(buffer[i].character);
+                    textWriter.Write(buffer[i].character);
                     Console.ResetColor();
                 }
+
+                drawing = false;
             });
 
             bufferChanged = false;
         }
 
         #endregion Drawing
+
+        private void StartDrawingbuffer()
+        {
+            var thread = new Thread(() =>
+            {
+                while (APPLICATION_RUNNING)
+                {
+                    DrawBuffer();
+                }
+            });
+
+            thread.IsBackground = true;
+            thread.Start();
+        }
 
         private void StartKeyboardListener()
         {
@@ -214,11 +237,11 @@ namespace Homeless
                 }
 
                 time.Stop();
-                DrawBuffer();
 
-                Thread.Yield();
+                //DrawBuffer();
 
                 APPLICATION_RUNNING = Update((float)time.Elapsed.TotalMilliseconds);
+                Thread.Yield();
 
                 time.Restart();
 

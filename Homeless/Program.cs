@@ -66,7 +66,7 @@ namespace Homeless
         {
             // Start the engine
             GameExample console = new GameExample();
-            console.ConstructConsole(80, 30, 10);
+            console.ConstructConsole(80, 30, 20);
         }
     }
 }
